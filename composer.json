@@ -1,0 +1,38 @@
+{
+  "name":        "ingenerator/code-point-simple",
+  "description": "Build a simple static file database for geocoding UK postcodes",
+  "keywords":    ["geocode", "postcode"],
+  "homepage":    "https://github.com/ingenerator/code-point-simple",
+  "type":        "library",
+  "license":     "BSD",
+  "authors":     [
+    {
+      "name":     "Andrew Coulton",
+      "email":    "andrew@ingenerator.com",
+      "homepage": "http://www.ingenerator.com"
+    },
+    {
+      "name":     "Matthias Gisder",
+      "homepage": "http://www.ingenerator.com"
+    }
+  ],
+  "require": {
+    "php":         ">=5.3.3"
+  },
+  "require-dev": {
+  },
+  "suggest": {
+  },
+  "support": {
+    "issues": "https://github.com/ingenerator/code-point-simple/issues",
+    "source": "https://github.com/ingenerator/code-point-simple"
+  },
+  "bin": [
+    "code-point-simple.php"
+  ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1.x-dev"
+    }
+  }
+}
