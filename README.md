@@ -74,9 +74,7 @@ centre-point of all the postcodes in that area, useful for example to centre a m
 if a user enters a partial postcode.
 
 ```json
-{
 [55.957685,-3.22933]
-}
 ```
 
 Generating the 13704 files/ 3003 directories will not take very long (roughly 1 minute on our test system). File sizes range from 13 bytes to 10k, overall space claimed on disk is roughly 200MB.
