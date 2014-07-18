@@ -90,7 +90,7 @@ a file path and load the appropriate JSON. For example:
 function geocode($postcode)
 {
   preg_match('/^([A-Z]{1,2})([0-9]) ?([0-9])([A-Z]{2})?$/', strtoupper($postcode), $matches);
-  list($full_match, $area, $district, $sector_prefix) = $matches;
+  list($full_match, $area, $district, $sector_prefix, $sector_suffix) = $matches;
   
   foreach (array(
     DB_BASE_DIR."/$area/$district/$sector_prefix.json",
