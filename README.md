@@ -79,11 +79,7 @@ if a user enters a partial postcode.
 }
 ```
 
-Generating the files will not take very long (roughly 1 minute on our test system).
-  stats:
-  13704 files/ 3003 directories.
-  File size from 13 bytes to 10k
-  Overall size: ca. 200MB
+Generating the 13704 files/ 3003 directories will not take very long (roughly 1 minute on our test system). File sizes range from 13 bytes to 10k, overall space claimed on disk is roughly 200MB.
 
 ## Server-side database lookups
 
