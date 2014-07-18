@@ -18,6 +18,7 @@ require_once('App_Coordinates_From_Cartesian.php');
 
 class CodePointSimple {
 
+    const VERBOSE = FALSE;
     const DATA_DIR = './data';
     const TMP_DIR = './tmp';
     const CSV_DIR = 'Data/CSV';
@@ -52,23 +53,23 @@ class CodePointSimple {
 
                 $lat_lon = self::lat_lon($csv[$header_mapping['NO']], $csv[$header_mapping['EA']]);
 
-                $postcode_matrix[$postcode] = array(
-                    'postcode' => $postcode,
-                    'area' => $area,
-                    'sector' => $sector,
-                    'district' => $district,
-                    'parsed_postcode' => $area . $district . ' ' . $sector,
-                    'lat' => $lat_lon['latitude'],
-                    'lon' => $lat_lon['longitude'],
+                $sector_prefix = substr($sector, 0, 2);
+                $sector_suffix = substr($sector, 2, 1);
+
+                $postcode_matrix[$area][$district][$sector_prefix][$sector_suffix] = array(
+                    0 => number_format($lat_lon['latitude'], 4),
+                    1 => number_format($lat_lon['longitude'], 4),
                 );
 
                 $postcode_district_centre_matrix[$area][$district][] = array(
-                    0 => $lat_lon['latitude'],
-                    1 => $lat_lon['longitude'],
+                    0 => number_format($lat_lon['latitude'], 4),
+                    1 => number_format($lat_lon['longitude'], 4),
                 );
 
             }
+
             fclose($handle);
+
 
             foreach($postcode_district_centre_matrix as $area => $value) {
                 foreach($value as $district => $postcode_tuples){
@@ -76,13 +77,15 @@ class CodePointSimple {
                     self::write_json_for_postcode_district_centre($postcode_tuples, $json_path, $area . $district);
                 }
             }
-            foreach($postcode_matrix as $postcode_tuple) {
-                $area = $postcode_tuple['area'];
-                $district = $postcode_tuple['district'];
-                $sector = $postcode_tuple['sector'];
+            foreach($postcode_matrix as $area => $postcode_tuple) {
+                foreach($postcode_tuple as $district => $postcode_tuple2) {
 
-                $json_path = preg_replace('/\/{2,}/', '/', $target_dir . "/$area/$district/$sector.json");
-                self::write_json_for_postcode($postcode_tuple, $json_path);
+                    foreach($postcode_tuple2 as $sector_prefix => $postcode_tuple3) {
+
+                        $json_path = preg_replace('/\/{2,}/', '/', $target_dir . "/$area/$district/$sector_prefix.json");
+                        self::write_json_for_postcode($postcode_tuple3, $json_path);
+                    }
+                }
             }
         }
     }
@@ -100,10 +103,8 @@ class CodePointSimple {
         $lon = $lat_lon['longitude'];
 
         $district_centre_data = array(
-            'match' => 'false',
-            'postcode' => $district_postcode,
-            'lat' => $lat,
-            'lon' => $lon,
+            0 => $lat,
+            1 => $lon,
         );
 
         return $district_centre_data;
@@ -111,13 +112,7 @@ class CodePointSimple {
 
     protected function postcode_data($postcode_tuple)
     {
-        $postcode_data = array(
-            'match' => 'true',
-            'postcode' => $postcode_tuple['parsed_postcode'],
-            'lat' => $postcode_tuple['lat'],
-            'lon' => $postcode_tuple['lon'],
-        );
-
+        $postcode_data = $postcode_tuple;
         return $postcode_data;
     }
 
@@ -137,12 +132,14 @@ class CodePointSimple {
 
     protected function do_write_json($json, $file_path)
     {
-        echo 'Writing data';
-        echo "\n   ";
-        print_r($json);
-        echo "\n   to this file:\n      ";
-        print_r($file_path);
-        echo "\n           ";
+        if(self::VERBOSE === TRUE){
+            echo 'Writing data';
+            echo "\n   ";
+            print_r($json);
+            echo "\n   to this file:\n      ";
+            print_r($file_path);
+            echo "\n           ";
+        }
 
         $pathinfo_array = pathinfo($file_path);
         $new_dir_name = $pathinfo_array['dirname'].'/';
@@ -160,8 +157,10 @@ class CodePointSimple {
         fwrite($handle, $json);
         fclose($handle);
 
-        echo "\ndone";
-        echo "\n\n\n";
+        if(self::VERBOSE === TRUE){
+            echo "\ndone";
+            echo "\n\n\n";
+        }
     }
 
     protected static function lat_lon($northing, $easting)
