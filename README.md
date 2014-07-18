@@ -45,17 +45,17 @@ postcode area, district and then sector. It looks like this:
 $PATH_TO_WRITE_DATABASE
 +---EH
 |   +---4
-|   |       1EZ.json
-|   |       2DR.json
+|   |       1.json
+|   |       2.json
 |   |       centre.json
 |   |
 |   \---7
-|           4JA.json
+|           4.json
 |           centre.json
 |
 \---NE
     \---12
-            4PG.json
+            4.json
             centre.json
 ```
 
@@ -63,10 +63,9 @@ The JSON for each postcode will look like:
 
 ```json
 {
-  "match":    true,
-  "postcode": "EH4 2DR",
-  "lat":      55.957685,
-  "lon":      -3.22933
+  "A":[55.957685,-3.22931],
+  "B":[55.957686,-3.22932],
+  "C":[55.957687,-3.22933],
 }
 ```
 
@@ -75,13 +74,10 @@ centre-point of all the postcodes in that area, useful for example to centre a m
 if a user enters a partial postcode.
 
 ```json
-{
-  "match":    false,
-  "postcode": "EH4",
-  "lat":      55.964883,
-  "lon":      -3.273922
-}
+[55.957685,-3.22933]
 ```
+
+Generating the 13704 files/ 3003 directories will not take very long (roughly 1 minute on our test system). File sizes range from 13 bytes to 10k, overall space claimed on disk is roughly 200MB.
 
 ## Server-side database lookups
 
@@ -91,11 +87,11 @@ a file path and load the appropriate JSON. For example:
 ```php
 function geocode($postcode)
 {
-  preg_match('/^([A-Z]{1,2})([0-9].*?) ?([0-9][A-Z]{2})?$/', strtoupper($postcode), $matches);
-  list($full_match, $area, $district, $sector) = $matches;
+  preg_match('/^([A-Z]{1,2})([0-9]) ?([0-9])([A-Z]{2})?$/', strtoupper($postcode), $matches);
+  list($full_match, $area, $district, $sector_prefix, $sector_suffix) = $matches;
   
   foreach (array(
-    DB_BASE_DIR."/$area/$district/$sector.json",
+    DB_BASE_DIR."/$area/$district/$sector_prefix.json",
     DB_BASE_DIR."/$area/$district/centre.json"
   ) as $json_path) {
     if (file_exists($json_path)) {
@@ -119,7 +115,7 @@ Implement the javascript to translate the postcode to an AJAX request for the re
 database URL.
 
 ```js
-postcode_parts = postcode.toUpperCase.match(/^([A-Z]{1,2})([0-9].*?) ?([0-9][A-Z]{2})?$/);
+postcode_parts = postcode.toUpperCase().match(/^([A-Z]{1,2})([0-9].?) ?([0-9])([A-Z]{2})?$/);
 if ( ! postcode_parts[3]) {
   postcode_parts[3] = 'centre';
 }
