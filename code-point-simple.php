@@ -53,8 +53,8 @@ class CodePointSimple {
 
                 $lat_lon = self::lat_lon($csv[$header_mapping['NO']], $csv[$header_mapping['EA']]);
 
-                $sector_prefix = substr($sector, 0, 2);
-                $sector_suffix = substr($sector, 2, 1);
+                $sector_prefix = substr($sector, 0, 1);
+                $sector_suffix = substr($sector, 1, 2);
 
                 $postcode_matrix[$area][$district][$sector_prefix][$sector_suffix] = array(
                     0 => number_format($lat_lon['latitude'], 4),
@@ -89,7 +89,6 @@ class CodePointSimple {
             }
         }
     }
-
 
     protected function download($url, $target_dir)
     {
