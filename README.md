@@ -79,6 +79,12 @@ if a user enters a partial postcode.
 }
 ```
 
+Generating the files will not take very long (roughly 1 minute on our test system).
+  stats:
+  13704 files/ 3003 directories.
+  File size from 13 bytes to 10k
+  Overall size: ca. 200MB
+
 ## Server-side database lookups
 
 To geocode a postcode in a server side application, just convert the postcode to
