@@ -41,7 +41,7 @@ class CodePointSimple {
         foreach($filelist as $file){
 
             $postcode_matrix = array();
-            $postcode_centre_matrix = array();
+            $postcode_district_centre_matrix = array();
             $handle = fopen($file, 'r');
 
             while($csv = fgetcsv($handle)){
@@ -62,7 +62,7 @@ class CodePointSimple {
                     'lon' => $lat_lon['longitude'],
                 );
 
-                $postcode_centre_matrix[$area][$district][] = array(
+                $postcode_district_centre_matrix[$area][$district][] = array(
                     0 => $lat_lon['latitude'],
                     1 => $lat_lon['longitude'],
                 );
@@ -70,14 +70,19 @@ class CodePointSimple {
             }
             fclose($handle);
 
-            foreach($postcode_centre_matrix as $area => $value) {
-                foreach($value as $district => $postcode_tuples_array){
-                    $json_path_centre = preg_replace('/\/{2,}/', '/', $target_dir . "/$area/$district/centre.json");
-                    self::write_json_for_postcode_centre($postcode_tuples_array, $json_path_centre, $area . $district);
+            foreach($postcode_district_centre_matrix as $area => $value) {
+                foreach($value as $district => $postcode_tuples){
+                    $json_path = preg_replace('/\/{2,}/', '/', $target_dir . "/$area/$district/centre.json");
+                    self::write_json_for_postcode_district_centre($postcode_tuples, $json_path, $area . $district);
                 }
             }
             foreach($postcode_matrix as $postcode_tuple) {
-                self::write_json_for_postcode($postcode_tuple, $target_dir);
+                $area = $postcode_tuple['area'];
+                $district = $postcode_tuple['district'];
+                $sector = $postcode_tuple['sector'];
+
+                $json_path = preg_replace('/\/{2,}/', '/', $target_dir . "/$area/$district/$sector.json");
+                self::write_json_for_postcode($postcode_tuple, $json_path);
             }
         }
     }
@@ -88,9 +93,9 @@ class CodePointSimple {
         // todo: implement download logic
     }
 
-    protected static function compute_district_centre_data($postcode_tuples_array, $district_postcode)
+    protected function postcode_district_centre_data($postcode_tuples, $district_postcode)
     {
-        $lat_lon = self::lat_lon_for_district_centre($postcode_tuples_array);
+        $lat_lon = self::lat_lon_for_district_centre($postcode_tuples);
         $lat = $lat_lon['latitude'];
         $lon = $lat_lon['longitude'];
 
@@ -104,31 +109,30 @@ class CodePointSimple {
         return $district_centre_data;
     }
 
-    protected function write_json_for_postcode_centre($postcode_tuples_array, $json_path_centre, $district_postcode)
+    protected function postcode_data($postcode_tuple)
     {
-        $district_centre_data = self::compute_district_centre_data($postcode_tuples_array, $district_postcode);
-        $json_centre = json_encode($district_centre_data);
-        self::do_write_json($json_centre, $json_path_centre);
-    }
-
-    protected function write_json_for_postcode($postcode_tuple, $target_dir)
-    {
-        $area = $postcode_tuple['area'];
-        $district = $postcode_tuple['district'];
-        $sector = $postcode_tuple['sector'];
-
-        $json_path_regular = preg_replace('/\/{2,}/', '/', $target_dir . "/$area/$district/$sector.json");
-
-        $postcode_array_regular = array(
+        $postcode_data = array(
             'match' => 'true',
             'postcode' => $postcode_tuple['parsed_postcode'],
             'lat' => $postcode_tuple['lat'],
             'lon' => $postcode_tuple['lon'],
         );
 
-        $json_regular = json_encode($postcode_array_regular);
+        return $postcode_data;
+    }
 
-        self::do_write_json($json_regular, $json_path_regular);
+    protected function write_json_for_postcode_district_centre($postcode_tuples, $json_path, $district_postcode)
+    {
+        $postcode_data = self::postcode_district_centre_data($postcode_tuples, $district_postcode);
+        $json = json_encode($postcode_data);
+        self::do_write_json($json, $json_path);
+    }
+
+    protected function write_json_for_postcode($postcode_tuple, $json_path)
+    {
+        $postcode_data = self::postcode_data($postcode_tuple);
+        $json = json_encode($postcode_data);
+        self::do_write_json($json, $json_path);
     }
 
     protected function do_write_json($json, $file_path)
