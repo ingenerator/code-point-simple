@@ -70,7 +70,6 @@ class CodePointSimple {
 
             fclose($handle);
 
-
             foreach($postcode_district_centre_matrix as $area => $value) {
                 foreach($value as $district => $postcode_tuples){
                     $json_path = preg_replace('/\/{2,}/', '/', $target_dir . "/$area/$district/centre.json");
