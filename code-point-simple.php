@@ -8,7 +8,7 @@
  * Call it: php ./code-point-simple.php http://parlvid.mysociety.org/os/codepo_gb-2014-05.zip ./output
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
- * @copyright 2014 Red61 Ltd
+ * @copyright 2014 inGenerator Ltd
  * @licence   proprietary
  */
 
