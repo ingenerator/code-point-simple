@@ -17,7 +17,9 @@
  *
  *
  */
-class App_Coordinates_From_Cartesian {
+namespace Ingenerator\CodePointSimple\Helper;
+
+class AppCoordinatesFromCartesian {
 
     /**
      * Holds the final Latitude
