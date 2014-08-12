@@ -1,6 +1,6 @@
 <?php
 /**
- * Converts Code-Point Open data to a hierarchy of directories and files.
+ * Retrieves latitude and longitude for a given UK postcode.
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
  * @copyright 2014 inGenerator Ltd
