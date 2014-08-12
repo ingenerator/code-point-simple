@@ -1,6 +1,6 @@
 <?php
 /**
- * Retrieves latitude and longitude for a given UK postcode.
+ * Retrieves latitude and longitude for a given (complete or partial) UK postcode.
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
  * @copyright 2014 inGenerator Ltd
@@ -11,7 +11,7 @@ namespace Ingenerator\CodePointSimple;
 
 use \Ingenerator\CodePointSimple\Helper\FileReader;
 
-class GeoCoder
+class PostcodeGeoCoder
 {
 
     const VERBOSE     = FALSE;
@@ -38,9 +38,13 @@ class GeoCoder
     {
         $this->file_reader = $file_reader;
         $this->db_base_dir = $target_dir;
-
     }
 
+    /**
+     * @param $postcode
+     *
+     * @return array
+     */
     public function geocode($postcode)
     {
         preg_match('/^([A-Z]{1,2})([0-9][^\ ]?) ?([0-9]?)([A-Z]{2})?$/', strtoupper($postcode), $matches);
