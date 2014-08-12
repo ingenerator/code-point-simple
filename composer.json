@@ -13,6 +13,7 @@
     },
     {
       "name":     "Matthias Gisder",
+      "email":    "matthias@ingenerator.com",
       "homepage": "http://www.ingenerator.com"
     }
   ],
@@ -20,6 +21,9 @@
     "php":         ">=5.3.3"
   },
   "require-dev": {
+      "phpspec/phpspec":                     "dev-master",
+      "phpspec/prophecy":                    "1.1.*@dev",
+      "bossa/phpspec2-expect":               "dev-master"
   },
   "suggest": {
   },
@@ -27,9 +31,20 @@
     "issues": "https://github.com/ingenerator/code-point-simple/issues",
     "source": "https://github.com/ingenerator/code-point-simple"
   },
-  "bin": [
-    "code-point-simple.php"
-  ],
+    "autoload": {
+        "psr-0": {
+            "Ingenerator": "src/",
+            "spec":   ""
+        }
+    },
+    "bin": [
+        "bin/code-point-simple.php",
+        "bin/geocode.php"
+    ],
+    "config": {
+        "bin-dir": "bin",
+        "preferred-install": "dist"
+    },
   "extra": {
     "branch-alias": {
       "dev-master": "0.1.x-dev"
