@@ -10,7 +10,6 @@
 namespace Ingenerator\CodePointSimple;
 
 use \Ingenerator\CodePointSimple\Helper\FileReader;
-use \Ingenerator\CodePointSimple\Helper\LatLonConverter;
 
 class GeoCoder
 {
@@ -33,7 +32,7 @@ class GeoCoder
 
     /**
      * @param \Ingenerator\CodePointSimple\Helper\FileReader $file_reader
-     * @param string $target_dir
+     * @param string                                         $target_dir
      */
     public function init(FileReader $file_reader, $target_dir)
     {
