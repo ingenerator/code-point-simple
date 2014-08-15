@@ -4,7 +4,7 @@
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
  * @copyright 2014 inGenerator Ltd
- * @licence   proprietary
+ * @licence   BSD
  */
 
 namespace Ingenerator\CodePointSimple;
@@ -39,14 +39,17 @@ class CodePointSimple
         $this->db_base_dir = $target_dir;
     }
 
+    /**
+     * Parses files in the data directory.
+     */
     public function parse()
     {
         $filelist = array_filter(glob(self::DATA_DIR . DIRECTORY_SEPARATOR . self::CSV_DIR . '/*'), 'is_file');
 
         $this->header_mapping = $this->get_header_mapping();
-        foreach ($filelist as $file) {
+        foreach ($filelist as $file_path) {
 
-            list($postcode_matrix, $postcode_district_centre_matrix) = $this->parse_file($file);
+            list($postcode_matrix, $postcode_district_centre_matrix) = $this->parse_file($file_path);
             foreach ($postcode_district_centre_matrix as $area => $value) {
                 foreach ($value as $district => $postcode_tuples) {
                     $json_path = preg_replace('/\/{2,}/', '/', $this->db_base_dir . "/$area/$district/centre.json");
@@ -67,6 +70,9 @@ class CodePointSimple
         }
     }
 
+    /**
+     * @return array
+     */
     protected function get_header_mapping()
     {
         $handle         = fopen(self::DATA_DIR . DIRECTORY_SEPARATOR . self::HEADER_FILE, 'r');
@@ -75,11 +81,18 @@ class CodePointSimple
         return array_flip($header);
     }
 
-    protected function parse_file($file)
+    /**
+     * Parses an individual file.
+     *
+     * @param string $file_path
+     *
+     * @return array
+     */
+    protected function parse_file($file_path)
     {
         $postcode_matrix                 = array();
         $postcode_district_centre_matrix = array();
-        $handle                          = fopen($file, 'r');
+        $handle                          = fopen($file_path, 'r');
 
         while ($csv = fgetcsv($handle)) {
             $postcode = $csv[$this->header_mapping['PC']];
@@ -107,6 +120,12 @@ class CodePointSimple
         return array($postcode_matrix, $postcode_district_centre_matrix);
     }
 
+    /**
+     * @param string $json
+     * @param string $file_path
+     *
+     * @throws \Exception
+     */
     protected function do_write($json, $file_path)
     {
         $pathinfo_array = pathinfo($file_path);

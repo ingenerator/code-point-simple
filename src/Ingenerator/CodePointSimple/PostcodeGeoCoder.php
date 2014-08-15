@@ -4,7 +4,7 @@
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
  * @copyright 2014 inGenerator Ltd
- * @licence   proprietary
+ * @licence   BSD
  */
 
 namespace Ingenerator\CodePointSimple;
