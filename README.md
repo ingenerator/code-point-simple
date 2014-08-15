@@ -1,5 +1,12 @@
 # CodePoint Simple
 
+[![License](https://poser.pugx.org/ingenerator/code-point-simple/license.svg)](https://packagist.org/packages/ingenerator/code-point-simple)
+[![Master Build Status](https://travis-ci.org/ingenerator/code-point-simple.png?branch=master)](https://travis-ci.org/ingenerator/code-point-simple)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ingenerator/code-point-simple/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ingenerator/code-point-simple/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/ingenerator/code-point-simple/v/stable.svg)](https://packagist.org/packages/ingenerator/code-point-simple)
+[![Total Downloads](https://poser.pugx.org/ingenerator/code-point-simple/downloads.svg)](https://packagist.org/packages/ingenerator/code-point-simple)
+[![Latest Unstable Version](https://poser.pugx.org/ingenerator/code-point-simple/v/unstable.svg)](https://packagist.org/packages/ingenerator/code-point-simple)
+
 Builds a simple static file database that maps UK postcodes to lat/lon based on
 the [CodePoint Open](http://data.gov.uk/dataset/code-point-open) dataset. 
 Create a high-performance AJAX postcode geocoder in minutes!
@@ -88,6 +95,7 @@ a file path and load the appropriate JSON. For example:
 function geocode($postcode)
 {
   preg_match('/^([A-Z]{1,2})([0-9]) ?([0-9])([A-Z]{2})?$/', strtoupper($postcode), $matches);
+//  preg_match('/^([A-Z]{1,2})([0-9][^\ ]?) ?([0-9]?)([A-Z]{2})?$/', strtoupper($postcode), $matches);
   list($full_match, $area, $district, $sector_prefix, $sector_suffix) = $matches;
   
   foreach (array(
