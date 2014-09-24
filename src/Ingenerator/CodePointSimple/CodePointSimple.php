@@ -9,34 +9,38 @@
 
 namespace Ingenerator\CodePointSimple;
 
-use \Ingenerator\CodePointSimple\Helper\FileReader;
 use \Ingenerator\CodePointSimple\Helper\LatLonHelper;
 
 class CodePointSimple
 {
 
     const VERBOSE     = FALSE;
-    const DATA_DIR    = './data';
-    const TMP_DIR     = './tmp';
     const CSV_DIR     = 'Data/CSV';
     const HEADER_FILE = 'Doc/Code-Point_Open_Column_Headers.csv';
 
-    /**
-     * @var string
-     */
-    protected $db_base_dir;
+	/**
+	 * @var string
+	 */
+	protected $db_base_dir;
 
-    /**
+	/**
+	 * @var string
+	 */
+	protected $data_dir;
+
+	/**
      * @var array
      */
     protected $header_mapping = array();
 
-    /**
-     * @param string $target_dir
-     */
-    public function init($target_dir)
+	/**
+	 * @param string $data_dir
+	 * @param string $target_dir
+	 */
+	public function init($data_dir, $target_dir)
     {
-        $this->db_base_dir = $target_dir;
+		$this->data_dir    = $data_dir;
+		$this->db_base_dir = $target_dir;
     }
 
     /**
@@ -44,7 +48,7 @@ class CodePointSimple
      */
     public function parse()
     {
-        $filelist = array_filter(glob(self::DATA_DIR . DIRECTORY_SEPARATOR . self::CSV_DIR . '/*'), 'is_file');
+        $filelist = array_filter(glob($this->data_dir . DIRECTORY_SEPARATOR . self::CSV_DIR . '/*'), 'is_file');
 
         $this->header_mapping = $this->get_header_mapping();
         foreach ($filelist as $file_path) {
@@ -75,7 +79,7 @@ class CodePointSimple
      */
     protected function get_header_mapping()
     {
-        $handle         = fopen(self::DATA_DIR . DIRECTORY_SEPARATOR . self::HEADER_FILE, 'r');
+        $handle         = fopen($this->data_dir . DIRECTORY_SEPARATOR . self::HEADER_FILE, 'r');
         $header         = fgetcsv($handle);
         fclose($handle);
         return array_flip($header);
