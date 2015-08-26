@@ -34,10 +34,12 @@ ensure your usage of the data complies with the licence requirements**.
 [Download CodePoint Open by filling in the download request on the Ordnance Survey website](http://www.ordnancesurvey.co.uk/business-and-government/products/code-point-open.html)
 . If you prefer, you can download it directly from a mirror such as [http://parlvid.mysociety.org/os/].
 
+Unpack the downloaded zip file into a new directory.
+
 ### Build the database
 
 ```bash
-php code-point-simple.php $URL_OF_CODEPOINT_ZIP $PATH_TO_WRITE_DATABASE
+php code-point-simple.php $PATH_TO_NEW_DIRECTORY $PATH_TO_WRITE_DATABASE
 ```
 
 CodePoint Open is updated every February, May, August and November. To update

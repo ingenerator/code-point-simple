@@ -18,7 +18,8 @@
     }
   ],
   "require": {
-    "php":         ">=5.3.3"
+    "php":                                   ">=5.3.3",
+    "php-coord/php-coord":                   "~1.1"
   },
   "require-dev": {
       "phpspec/phpspec":                     "dev-master",

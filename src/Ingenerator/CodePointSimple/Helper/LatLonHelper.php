@@ -2,8 +2,7 @@
 
 namespace Ingenerator\CodePointSimple\Helper;
 
-use \Ingenerator\CodePointSimple\Helper\AppCoordinatesFromCartesian;
-
+use PHPCoord\OSRef;
 
 class LatLonHelper {
 
@@ -21,17 +20,39 @@ class LatLonHelper {
         return $district_centre_data;
     }
 
-    public static function lat_lon($northing, $easting)
+	/**
+	 * Handle the converter that does the actual work.
+	 *
+	 * @param $northing
+	 * @param $easting
+	 *
+	 * @return array
+	 */
+	public static function lat_lon($northing, $easting)
     {
         // todo: evaluate accuracy of the results returned.
         // We might later drop in another class do the actual translation.
-        $lat_lon_converter = new AppCoordinatesFromCartesian($easting, $northing);
-        $result            = $lat_lon_converter->Convert();
+
+		$lat_lon_converter = new OSRef($easting, $northing);
+		$latlng            = $lat_lon_converter->toLatLng();
+
+		$result =  array(
+			'latitude'  => $latlng->lat,
+			'longitude' => $latlng->lng
+		);
 
         return $result;
     }
 
-    public static function lat_lon_for_district_centre($data_array)
+	/**
+	 * Calculate the centre of the district given.
+	 * based on http://stackoverflow.com/questions/6671183/calculate-the-center-point-of-multiple-latitude-longitude-coordinate-pairs/16561975#16561975
+	 *
+	 * @param $data_array
+	 *
+	 * @return array
+	 */
+	public static function lat_lon_for_district_centre($data_array)
     {
         // todo: evaluate accuracy of the results returned.
         $minlat = FALSE;
@@ -73,4 +94,4 @@ class LatLonHelper {
         return $lat_lon;
     }
 
-} 
+}
