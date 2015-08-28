@@ -22,8 +22,8 @@
     "php-coord/php-coord":                   "~1.1"
   },
   "require-dev": {
-      "phpspec/phpspec":                     "dev-master",
-      "phpspec/prophecy":                    "1.1.*@dev",
+      "phpspec/phpspec":                     "~2.0@dev",
+      "phpspec/prophecy":                    "~1.1@dev",
       "bossa/phpspec2-expect":               "dev-master"
   },
   "suggest": {
