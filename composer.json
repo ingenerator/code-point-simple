@@ -1,6 +1,6 @@
 {
   "name":        "ingenerator/code-point-simple",
-  "description": "Build a simple static file database for geocoding UK postcodes",
+  "description": "ABANDONED - use the postcodes.io web service or self-hosted project",
   "keywords":    ["geocode", "postcode"],
   "homepage":    "https://github.com/ingenerator/code-point-simple",
   "type":        "library",
